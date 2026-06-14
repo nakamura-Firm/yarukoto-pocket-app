@@ -66,7 +66,9 @@
       gap: 10px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       flex-wrap: wrap;
+      transition: opacity 0.5s;
     }
+    .task-item.fading { opacity: 0; }
     .task-item input[type="checkbox"] {
       width: 20px;
       height: 20px;
@@ -83,14 +85,6 @@
       color: #c62828;
       font-weight: bold;
       min-width: 120px;
-    }
-    .undo-btn {
-      background: #e0e0e0;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
     }
     .icon-group {
       display: flex;
@@ -125,14 +119,12 @@
       padding: 3px 8px;
       border-radius: 6px;
     }
-    .due-btn {
-      background: #e8f5e9;
-      border: 1px solid #a5d6a7;
-      color: #2e7d32;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
+    .due-input {
       font-size: 13px;
+      padding: 5px 8px;
+      border: 1px solid #a5d6a7;
+      border-radius: 6px;
+      color: #2e7d32;
     }
     .bottom-nav {
       position: fixed;
@@ -205,12 +197,33 @@
   <script>
     const ICON_TO_SCREEN = { '📌': 'pin', '☑️': 'check', '🗓️': 'cal', '💡': 'idea' };
     const ICONS = ['📌', '☑️', '🗓️', '💡'];
+    const STORAGE_KEY = 'yarukoto-pocket-tasks';
     let tasks = [];
     let nextId = 1;
+    function save() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ tasks, nextId }));
+      } catch (e) {
+        console.log('保存できませんでした:', e);
+      }
+    }
+    function load() {
+      try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (data) {
+          const parsed = JSON.parse(data);
+          tasks = parsed.tasks || [];
+          nextId = parsed.nextId || 1;
+        }
+      } catch (e) {
+        console.log('読み込めませんでした:', e);
+      }
+    }
     function addTask() {
       const text = prompt('タスクの内容を入力してください');
       if (!text || text.trim() === '') return;
       tasks.push({ id: nextId++, text: text.trim(), icon: null, done: false, due: null });
+      save();
       render();
     }
     function switchScreen(target) {
@@ -224,6 +237,21 @@
     function formatDue(dateStr) {
       const d = new Date(dateStr);
       return (d.getMonth() + 1) + '月' + d.getDate() + '日';
+    }
+    function completeTask(task) {
+      task.done = true;
+      save();
+      render();
+      setTimeout(() => {
+        document.querySelectorAll('.task-item').forEach(el => {
+          if (el.dataset.taskId == task.id) el.classList.add('fading');
+        });
+        setTimeout(() => {
+          tasks = tasks.filter(t => t.id !== task.id);
+          save();
+          render();
+        }, 500);
+      }, 3000);
     }
     function render() {
       ['list', 'pin', 'check', 'cal', 'idea'].forEach(key => {
@@ -249,17 +277,18 @@
     function makeTaskEl(task, screenKey) {
       const li = document.createElement('li');
       li.className = 'task-item' + (task.done ? ' done' : '');
+      li.dataset.taskId = task.id;
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.checked = task.done;
+      checkbox.disabled = task.done;
       checkbox.onchange = () => {
-        task.done = checkbox.checked;
-        render();
+        if (checkbox.checked) completeTask(task);
       };
       const span = document.createElement('span');
       if (task.done) {
         span.className = 'done-msg';
-        span.textContent = 'タスクを完了しました。楽勝🖊️';
+        span.textContent = '楽勝🖊️タスクを完了しました';
       } else {
         span.className = 'task-text';
         span.textContent = task.text;
@@ -272,13 +301,6 @@
         due.textContent = '期限：' + formatDue(task.due);
         li.appendChild(due);
       }
-      if (task.done) {
-        const undo = document.createElement('button');
-        undo.className = 'undo-btn';
-        undo.textContent = '元に戻す';
-        undo.onclick = () => { task.done = false; render(); };
-        li.appendChild(undo);
-      }
       if (screenKey === 'list' && !task.done) {
         const iconGroup = document.createElement('div');
         iconGroup.className = 'icon-group';
@@ -288,6 +310,7 @@
           btn.textContent = icon;
           btn.onclick = () => {
             task.icon = (task.icon === icon) ? null : icon;
+            save();
             render();
           };
           iconGroup.appendChild(btn);
@@ -295,19 +318,21 @@
         li.appendChild(iconGroup);
       }
       if (screenKey === 'check' && !task.done) {
-        const dueBtn = document.createElement('button');
-        dueBtn.className = 'due-btn';
-        dueBtn.textContent = task.due ? '📅 期限を変更' : '📅 期限を設定';
-        dueBtn.onclick = () => {
-          const input = prompt('期限を入力してください（例：2026-06-20）', task.due || '');
-          if (input === null) return;
-          task.due = input.trim() === '' ? null : input.trim();
+        const dateInput = document.createElement('input');
+        dateInput.type = 'date';
+        dateInput.className = 'due-input';
+        if (task.due) dateInput.value = task.due;
+        dateInput.onchange = () => {
+          task.due = dateInput.value || null;
+          save();
           render();
         };
-        li.appendChild(dueBtn);
+        li.appendChild(dateInput);
       }
       return li;
     }
+    load();
+    render();
   </script>
 </body>
 </html>
