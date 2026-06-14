@@ -85,6 +85,17 @@
       border-radius: 6px 6px 0 0; min-height: 4px; transition: height 0.4s;
     }
     .bar-label { font-size: 11px; color: #9aa5b1; margin-top: 6px; }
+    .list-toggle {
+      display: flex; justify-content: space-between; align-items: center;
+      background: #fff; border-radius: 14px; padding: 16px 18px; margin-top: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); cursor: pointer;
+      font-size: 16px; font-weight: 700; color: var(--blue);
+      border-top: 4px solid var(--blue);
+    }
+    .list-toggle .arrow { font-size: 18px; transition: transform 0.25s; }
+    .list-toggle.open .arrow { transform: rotate(180deg); }
+    .list-collapse { display: none; margin-top: 14px; }
+    .list-collapse.open { display: block; animation: fadeIn 0.25s; }
     .modal-bg {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
       z-index: 200; align-items: center; justify-content: center; padding: 20px;
@@ -204,12 +215,16 @@
       <h3>📊 月別の完了数</h3>
       <div class="chart" id="chart"></div>
     </div>
-  </section>
-  <section class="screen" data-screen="list">
-    <div class="legend">
-      タスク右のボタンで仕分け： <b>📌</b>軽め ／ <b>☑️</b>重め ／ <b>🗓️</b>予定 ／ <b>💡</b>アイデア
+    <div class="list-toggle" onclick="toggleList()">
+      <span>📋 タスク一覧</span>
+      <span class="arrow" id="listArrow">↓</span>
     </div>
-    <ul class="task-list" id="list-list"></ul>
+    <div class="list-collapse" id="listCollapse">
+      <div class="legend">
+        タスク右のボタンで仕分け： <b>📌</b>軽め ／ <b>☑️</b>重め ／ <b>🗓️</b>予定 ／ <b>💡</b>アイデア
+      </div>
+      <ul class="task-list" id="list-list"></ul>
+    </div>
   </section>
   <section class="screen" data-screen="pin">
     <h2 class="screen-title">📌 軽めのタスク</h2>
@@ -249,7 +264,6 @@
   <div class="toast" id="toast"></div>
   <nav class="bottom-nav">
     <button class="nav-btn active" data-target="home" onclick="switchScreen('home')"><span class="nav-icon">🏠</span>ホーム</button>
-    <button class="nav-btn" data-target="list" onclick="switchScreen('list')"><span class="nav-icon">📋</span>リスト</button>
     <button class="nav-btn" data-target="pin" onclick="switchScreen('pin')"><span class="nav-icon">📌</span>軽め</button>
     <button class="nav-btn" data-target="check" onclick="switchScreen('check')"><span class="nav-icon">☑️</span>重め</button>
     <button class="nav-btn" data-target="cal" onclick="switchScreen('cal')"><span class="nav-icon">🗓️</span>予定</button>
@@ -295,6 +309,12 @@
       setTimeout(() => document.getElementById('modalInput').focus(), 100);
     }
     function closeModal() { document.getElementById('modalBg').classList.remove('show'); }
+    function toggleList() {
+      const toggle = document.querySelector('.list-toggle');
+      const collapse = document.getElementById('listCollapse');
+      const open = collapse.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+    }
     function renderCatChoices() {
       const box = document.getElementById('catChoices');
       box.innerHTML = '';
