@@ -23,172 +23,192 @@
       min-height: 100vh;
       padding: 24px 18px 88px;
     }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    h1 {
-      font-size: 24px;
-      color: var(--blue);
-      letter-spacing: 0.5px;
-    }
-    .add-btn {
-      background: var(--blue);
-      color: #fff;
-      border: none;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      font-size: 28px;
-      cursor: pointer;
-      line-height: 1;
-      box-shadow: 0 3px 8px rgba(21,101,192,0.35);
-      transition: transform 0.12s, box-shadow 0.12s;
-    }
-    .add-btn:hover { transform: translateY(-2px); }
-    .add-btn:active { transform: scale(0.94); }
-    .hint {
-      background: var(--yellow-soft);
-      padding: 12px 16px;
-      border-radius: 12px;
-      font-size: 14px;
-      margin-bottom: 18px;
-      color: #6d4c00;
-      border-left: 4px solid var(--yellow);
-    }
+    header { display: flex; justify-content: center; align-items: center; margin-bottom: 18px; }
+    h1 { font-size: 24px; color: var(--blue); letter-spacing: 0.5px; }
     .screen { display: none; }
     .screen.active { display: block; animation: fadeIn 0.25s; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .screen-title {
-      font-size: 19px;
-      color: var(--blue);
-      margin-bottom: 12px;
-      font-weight: 700;
-    }
-    .link-btn {
-      display: inline-block;
-      background: var(--yellow);
-      color: #5d4200;
-      text-decoration: none;
-      padding: 11px 18px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 6px rgba(251,192,45,0.4);
-      transition: transform 0.12s;
-    }
-    .link-btn:active { transform: scale(0.96); }
-    .task-list { list-style: none; }
-    .task-item {
-      background: #fff;
-      padding: 15px;
+    .screen-title { font-size: 19px; color: var(--blue); margin-bottom: 12px; font-weight: 700; }
+    .home-hint {
+      background: var(--yellow-soft);
+      padding: 14px 16px;
       border-radius: 12px;
-      margin-bottom: 11px;
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      flex-wrap: wrap;
-      transition: opacity 0.5s, transform 0.12s;
-    }
-    .task-item.fading { opacity: 0; transform: translateX(20px); }
-    .task-item input[type="checkbox"] {
-      width: 22px;
-      height: 22px;
-      cursor: pointer;
-      flex-shrink: 0;
-      accent-color: var(--blue);
-    }
-    .task-text { flex: 1; word-break: break-all; min-width: 120px; font-size: 15px; }
-    .done-msg {
-      flex: 1;
-      color: var(--red);
-      font-weight: 700;
-      min-width: 120px;
-    }
-    .icon-group {
-      display: flex;
-      gap: 6px;
-      flex-shrink: 0;
-    }
-    .icon-btn {
-      background: #f1f4f8;
-      border: 2px solid transparent;
-      border-radius: 10px;
-      width: 38px;
-      height: 38px;
-      font-size: 18px;
-      cursor: pointer;
-      line-height: 1;
-      transition: all 0.15s;
-    }
-    .icon-btn:active { transform: scale(0.9); }
-    .icon-btn.selected {
-      background: var(--blue);
-      border-color: var(--blue-dark);
-      box-shadow: 0 2px 6px rgba(21,101,192,0.4);
-    }
-    .empty-msg {
-      color: #9aa5b1;
-      font-size: 14px;
-      padding: 28px 0;
+      font-size: 15px;
+      margin-bottom: 18px;
+      color: #6d4c00;
+      border-left: 4px solid var(--yellow);
       text-align: center;
-    }
-    .due-label {
-      font-size: 12px;
-      color: var(--blue);
-      background: #e3f0fd;
-      padding: 4px 9px;
-      border-radius: 8px;
       font-weight: 600;
     }
-    .due-input {
-      font-size: 13px;
-      padding: 6px 9px;
-      border: 1px solid #cfd8e3;
-      border-radius: 8px;
-      color: var(--blue);
-    }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 500px;
-      background: #fff;
-      display: flex;
-      border-top: 1px solid #e3e8ee;
-      box-shadow: 0 -3px 10px rgba(0,0,0,0.06);
-    }
-    .nav-btn {
-      flex: 1;
-      border: none;
-      background: none;
-      padding: 9px 2px;
-      font-size: 11px;
-      color: #9aa5b1;
+    .pocket-wrap { display: flex; justify-content: center; margin-bottom: 24px; }
+    .pocket {
+      width: 230px;
+      height: 115px;
+      background: linear-gradient(to bottom, var(--yellow) 0%, #f9a825 100%);
+      border-radius: 0 0 230px 230px;
+      border: 4px solid #f57f17;
+      border-top: none;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
-      transition: color 0.15s;
+      justify-content: center;
+      gap: 4px;
+      box-shadow: 0 6px 16px rgba(245,127,23,0.35);
+      transition: transform 0.12s;
+      position: relative;
     }
-    .nav-btn .nav-icon { font-size: 21px; }
+    .pocket:active { transform: scale(0.96); }
+    .pocket .plus { font-size: 40px; color: #fff; line-height: 1; text-shadow: 0 2px 3px rgba(0,0,0,0.15); }
+    .pocket .ptxt { font-size: 15px; color: #5d4200; font-weight: 800; }
+    .stats { display: flex; gap: 12px; margin-bottom: 20px; }
+    .stat-card {
+      flex: 1; background: #fff; border-radius: 14px; padding: 18px 12px;
+      text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-top: 4px solid var(--blue);
+    }
+    .stat-card.accent { border-top-color: var(--yellow); }
+    .stat-card .num { font-size: 32px; font-weight: 800; color: var(--blue); line-height: 1.1; }
+    .stat-card.accent .num { color: #f57f17; }
+    .stat-card .lbl { font-size: 13px; color: #7a8896; margin-top: 4px; }
+    .chart-box {
+      background: #fff; border-radius: 14px; padding: 18px 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-top: 4px solid var(--yellow);
+    }
+    .chart-box h3 { font-size: 15px; color: #5a6b7b; margin-bottom: 16px; }
+    .chart { display: flex; align-items: flex-end; justify-content: space-around; height: 150px; gap: 6px; }
+    .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
+    .bar-num { font-size: 12px; color: var(--blue); font-weight: 700; margin-bottom: 4px; }
+    .bar {
+      width: 100%; max-width: 34px;
+      background: linear-gradient(to top, var(--blue), #42a5f5);
+      border-radius: 6px 6px 0 0; min-height: 4px; transition: height 0.4s;
+    }
+    .bar-label { font-size: 11px; color: #9aa5b1; margin-top: 6px; }
+    .modal-bg {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+      z-index: 200; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-bg.show { display: flex; }
+    .modal { background: #fff; border-radius: 16px; padding: 22px; width: 100%; max-width: 360px; }
+    .modal h3 { font-size: 17px; color: var(--blue); margin-bottom: 14px; }
+    .modal input[type="text"] {
+      width: 100%; padding: 12px 14px; border: 2px solid #d5dde6;
+      border-radius: 10px; font-size: 15px; outline: none; margin-bottom: 16px;
+    }
+    .modal input[type="text"]:focus { border-color: var(--blue); }
+    .modal .cat-label { font-size: 13px; color: #7a8896; margin-bottom: 8px; }
+    .cat-choices { display: flex; gap: 8px; margin-bottom: 18px; }
+    .cat-choice {
+      flex: 1; background: #f1f4f8; border: 2px solid transparent; border-radius: 10px;
+      padding: 10px 4px; font-size: 12px; cursor: pointer; text-align: center; transition: all 0.15s;
+    }
+    .cat-choice .ci { font-size: 20px; display: block; margin-bottom: 2px; }
+    .cat-choice.selected { background: var(--blue); color: #fff; border-color: var(--blue-dark); }
+    .modal-btns { display: flex; gap: 10px; }
+    .modal-btns button { flex: 1; padding: 12px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; border: none; }
+    .btn-cancel { background: #eceff3; color: #5a6b7b; }
+    .btn-ok { background: var(--blue); color: #fff; }
+    .hint {
+      background: var(--yellow-soft); padding: 12px 16px; border-radius: 12px;
+      font-size: 14px; margin-bottom: 18px; color: #6d4c00; border-left: 4px solid var(--yellow);
+    }
+    .legend {
+      background: #fff; border-radius: 12px; padding: 12px 14px; margin-bottom: 16px;
+      font-size: 13px; color: #5a6b7b; box-shadow: 0 2px 8px rgba(0,0,0,0.05); line-height: 1.9;
+    }
+    .legend b { color: var(--blue); }
+    .link-btn {
+      display: inline-block; background: var(--yellow); color: #5d4200; text-decoration: none;
+      padding: 11px 18px; border-radius: 10px; font-size: 14px; font-weight: 700;
+      margin-bottom: 18px; box-shadow: 0 2px 6px rgba(251,192,45,0.4);
+    }
+    .link-btn:active { transform: scale(0.96); }
+    .task-list { list-style: none; }
+    .task-item {
+      background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 11px;
+      display: flex; align-items: center; gap: 11px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      flex-wrap: wrap; transition: opacity 0.5s, transform 0.12s;
+    }
+    .task-item.fading { opacity: 0; transform: translateX(20px); }
+    .task-item input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; flex-shrink: 0; accent-color: var(--blue); }
+    .task-text { flex: 1; word-break: break-all; min-width: 120px; font-size: 15px; }
+    .edit-input {
+      flex: 1; min-width: 120px; font-size: 15px; padding: 6px 8px;
+      border: 2px solid var(--blue); border-radius: 8px; outline: none;
+    }
+    .done-msg { flex: 1; color: var(--red); font-weight: 700; min-width: 120px; }
+    .row-btns { display: flex; gap: 6px; flex-shrink: 0; }
+    .mini-btn {
+      background: #f1f4f8; border: none; border-radius: 8px;
+      width: 34px; height: 34px; font-size: 15px; cursor: pointer; line-height: 1; transition: transform 0.12s;
+    }
+    .mini-btn:active { transform: scale(0.9); }
+    .icon-group { display: flex; gap: 6px; flex-shrink: 0; }
+    .icon-btn {
+      background: #f1f4f8; border: 2px solid transparent; border-radius: 10px;
+      width: 38px; height: 38px; font-size: 18px; cursor: pointer; line-height: 1; transition: all 0.15s;
+    }
+    .icon-btn:active { transform: scale(0.9); }
+    .icon-btn.selected { background: var(--blue); border-color: var(--blue-dark); box-shadow: 0 2px 6px rgba(21,101,192,0.4); }
+    .empty-box {
+      background: #fff; border-radius: 12px; padding: 28px 20px; text-align: center;
+      color: #7a8896; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .empty-box .emoji { font-size: 32px; display: block; margin-bottom: 8px; }
+    .empty-box .title { font-weight: 700; color: #5a6b7b; margin-bottom: 4px; }
+    .empty-box .sub { font-size: 13px; }
+    .due-label { font-size: 12px; color: var(--blue); background: #e3f0fd; padding: 4px 9px; border-radius: 8px; font-weight: 600; }
+    .due-input { font-size: 13px; padding: 6px 9px; border: 1px solid #cfd8e3; border-radius: 8px; color: var(--blue); }
+    .toast {
+      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--blue-dark); color: #fff; padding: 10px 20px; border-radius: 20px;
+      font-size: 14px; opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 500px; background: #fff; display: flex;
+      border-top: 1px solid #e3e8ee; box-shadow: 0 -3px 10px rgba(0,0,0,0.06);
+    }
+    .nav-btn {
+      flex: 1; border: none; background: none; padding: 9px 2px; font-size: 10px;
+      color: #9aa5b1; cursor: pointer; display: flex; flex-direction: column;
+      align-items: center; gap: 3px; transition: color 0.15s;
+    }
+    .nav-btn .nav-icon { font-size: 20px; }
     .nav-btn.active { color: var(--blue); font-weight: 700; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>やることポケット</h1>
-    <button class="add-btn" onclick="addTask()">＋</button>
-  </header>
-  <section class="screen active" data-screen="list">
-    <p class="hint">⚾ ボールが来たらすぐに登録する</p>
+  <header><h1>やることポケット</h1></header>
+  <section class="screen active" data-screen="home">
+    <p class="home-hint">⚾ ボールが来たらすぐに入れる</p>
+    <div class="pocket-wrap">
+      <div class="pocket" onclick="openModal()">
+        <span class="plus">＋</span>
+        <span class="ptxt">タスクを追加</span>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat-card">
+        <div class="num" id="stat-month">0</div>
+        <div class="lbl">今月の完了</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="num" id="stat-today">0</div>
+        <div class="lbl">今日の完了</div>
+      </div>
+    </div>
+    <div class="chart-box">
+      <h3>📊 月別の完了数</h3>
+      <div class="chart" id="chart"></div>
+    </div>
+  </section>
+  <section class="screen" data-screen="list">
+    <div class="legend">
+      タスク右のボタンで仕分け： <b>📌</b>軽め ／ <b>☑️</b>重め ／ <b>🗓️</b>予定 ／ <b>💡</b>アイデア
+    </div>
     <ul class="task-list" id="list-list"></ul>
   </section>
   <section class="screen" data-screen="pin">
@@ -214,8 +234,22 @@
     <a class="link-btn" href="https://www.mindmeister.com/login" target="_blank">🧠 マインドマイスターで整理する</a>
     <ul class="task-list" id="list-idea"></ul>
   </section>
+  <div class="modal-bg" id="modalBg">
+    <div class="modal">
+      <h3>新しいタスク</h3>
+      <input type="text" id="modalInput" placeholder="やることを入力…">
+      <div class="cat-label">仕分け先（あとで変更できます）</div>
+      <div class="cat-choices" id="catChoices"></div>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+        <button class="btn-ok" onclick="submitModal()">追加</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
   <nav class="bottom-nav">
-    <button class="nav-btn active" data-target="list" onclick="switchScreen('list')"><span class="nav-icon">📋</span>リスト</button>
+    <button class="nav-btn active" data-target="home" onclick="switchScreen('home')"><span class="nav-icon">🏠</span>ホーム</button>
+    <button class="nav-btn" data-target="list" onclick="switchScreen('list')"><span class="nav-icon">📋</span>リスト</button>
     <button class="nav-btn" data-target="pin" onclick="switchScreen('pin')"><span class="nav-icon">📌</span>軽め</button>
     <button class="nav-btn" data-target="check" onclick="switchScreen('check')"><span class="nav-icon">☑️</span>重め</button>
     <button class="nav-btn" data-target="cal" onclick="switchScreen('cal')"><span class="nav-icon">🗓️</span>予定</button>
@@ -223,16 +257,24 @@
   </nav>
   <script>
     const ICON_TO_SCREEN = { '📌': 'pin', '☑️': 'check', '🗓️': 'cal', '💡': 'idea' };
+    const ICON_LABEL = { '📌': '軽め', '☑️': '重め', '🗓️': '予定', '💡': 'アイデア' };
     const ICONS = ['📌', '☑️', '🗓️', '💡'];
     const STORAGE_KEY = 'yarukoto-pocket-tasks';
+    const EMPTY = {
+      list: { emoji: '⚾', title: 'まずは最初のタスクを追加', sub: 'ホームの「＋」から追加しよう' },
+      pin:  { emoji: '📌', title: 'ここは空が理想です✨', sub: '軽いタスクはサッと片付けよう' },
+      check:{ emoji: '☑️', title: '重いタスクをここへ', sub: '小さく分解すると進めやすい' },
+      cal:  { emoji: '🗓️', title: '予定にしたいタスクをここへ', sub: 'Googleカレンダーに登録しよう' },
+      idea: { emoji: '💡', title: '思いついたことをここに', sub: 'アクションプランまで落とし込もう' }
+    };
     let tasks = [];
     let nextId = 1;
+    let doneLog = [];
+    let modalCat = null;
+    let editingId = null;
     function save() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ tasks, nextId }));
-      } catch (e) {
-        console.log('保存できませんでした:', e);
-      }
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ tasks, nextId, doneLog })); }
+      catch (e) { console.log('保存できませんでした:', e); }
     }
     function load() {
       try {
@@ -241,44 +283,95 @@
           const parsed = JSON.parse(data);
           tasks = parsed.tasks || [];
           nextId = parsed.nextId || 1;
+          doneLog = parsed.doneLog || [];
         }
-      } catch (e) {
-        console.log('読み込めませんでした:', e);
-      }
+      } catch (e) { console.log('読み込めませんでした:', e); }
     }
-    function addTask() {
-      const text = prompt('タスクの内容を入力してください');
-      if (!text || text.trim() === '') return;
-      tasks.push({ id: nextId++, text: text.trim(), icon: null, done: false, due: null });
+    function openModal() {
+      modalCat = null;
+      document.getElementById('modalInput').value = '';
+      renderCatChoices();
+      document.getElementById('modalBg').classList.add('show');
+      setTimeout(() => document.getElementById('modalInput').focus(), 100);
+    }
+    function closeModal() { document.getElementById('modalBg').classList.remove('show'); }
+    function renderCatChoices() {
+      const box = document.getElementById('catChoices');
+      box.innerHTML = '';
+      ICONS.forEach(icon => {
+        const div = document.createElement('div');
+        div.className = 'cat-choice' + (modalCat === icon ? ' selected' : '');
+        div.innerHTML = '<span class="ci">' + icon + '</span>' + ICON_LABEL[icon];
+        div.onclick = () => { modalCat = (modalCat === icon) ? null : icon; renderCatChoices(); };
+        box.appendChild(div);
+      });
+    }
+    function submitModal() {
+      const text = document.getElementById('modalInput').value.trim();
+      if (text === '') return;
+      tasks.push({ id: nextId++, text: text, icon: modalCat, done: false, due: null });
+      closeModal();
       save();
       render();
     }
     function switchScreen(target) {
-      document.querySelectorAll('.screen').forEach(s => {
-        s.classList.toggle('active', s.dataset.screen === target);
-      });
-      document.querySelectorAll('.nav-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.target === target);
-      });
+      document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.dataset.screen === target));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.target === target));
+      if (target === 'home') renderStats();
+    }
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1500);
     }
     function formatDue(dateStr) {
       const d = new Date(dateStr);
       return (d.getMonth() + 1) + '月' + d.getDate() + '日';
     }
+    function todayStr() {
+      const d = new Date();
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
     function completeTask(task) {
       task.done = true;
+      doneLog.push(todayStr());
       save();
       render();
+      renderStats();
       setTimeout(() => {
         document.querySelectorAll('.task-item').forEach(el => {
           if (el.dataset.taskId == task.id) el.classList.add('fading');
         });
-        setTimeout(() => {
-          tasks = tasks.filter(t => t.id !== task.id);
-          save();
-          render();
-        }, 500);
+        setTimeout(() => { tasks = tasks.filter(t => t.id !== task.id); save(); render(); }, 500);
       }, 3000);
+    }
+    function renderStats() {
+      const now = new Date();
+      const thisMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+      const today = todayStr();
+      document.getElementById('stat-month').textContent = doneLog.filter(d => d.startsWith(thisMonth)).length;
+      document.getElementById('stat-today').textContent = doneLog.filter(d => d === today).length;
+      const months = [];
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+        months.push({ label: (d.getMonth() + 1) + '月', count: doneLog.filter(x => x.startsWith(key)).length });
+      }
+      const max = Math.max(1, ...months.map(m => m.count));
+      const chart = document.getElementById('chart');
+      chart.innerHTML = '';
+      months.forEach(m => {
+        const wrap = document.createElement('div');
+        wrap.className = 'bar-wrap';
+        const height = Math.round((m.count / max) * 120);
+        wrap.innerHTML = '<div class="bar-num">' + m.count + '</div>' +
+                         '<div class="bar" style="height:' + height + 'px"></div>' +
+                         '<div class="bar-label">' + m.label + '</div>';
+        chart.appendChild(wrap);
+      });
     }
     function render() {
       ['list', 'pin', 'check', 'cal', 'idea'].forEach(key => {
@@ -291,13 +384,16 @@
           document.getElementById('list-' + screenKey).appendChild(makeTaskEl(task, screenKey));
         }
       });
-      ['pin', 'check', 'cal', 'idea'].forEach(key => {
+      ['list', 'pin', 'check', 'cal', 'idea'].forEach(key => {
         const ul = document.getElementById('list-' + key);
         if (ul.children.length === 0) {
-          const p = document.createElement('li');
-          p.className = 'empty-msg';
-          p.textContent = 'まだタスクがありません';
-          ul.appendChild(p);
+          const info = EMPTY[key];
+          const li = document.createElement('li');
+          li.className = 'empty-box';
+          li.innerHTML = '<span class="emoji">' + info.emoji + '</span>' +
+                         '<div class="title">' + info.title + '</div>' +
+                         '<div class="sub">' + info.sub + '</div>';
+          ul.appendChild(li);
         }
       });
     }
@@ -309,9 +405,23 @@
       checkbox.type = 'checkbox';
       checkbox.checked = task.done;
       checkbox.disabled = task.done;
-      checkbox.onchange = () => {
-        if (checkbox.checked) completeTask(task);
-      };
+      checkbox.onchange = () => { if (checkbox.checked) completeTask(task); };
+      li.appendChild(checkbox);
+      if (editingId === task.id && screenKey === 'list' && !task.done) {
+        const inp = document.createElement('input');
+        inp.type = 'text';
+        inp.className = 'edit-input';
+        inp.value = task.text;
+        inp.onkeydown = (e) => { if (e.key === 'Enter') { task.text = inp.value.trim() || task.text; editingId = null; save(); render(); } };
+        li.appendChild(inp);
+        setTimeout(() => inp.focus(), 50);
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'mini-btn';
+        saveBtn.textContent = '💾';
+        saveBtn.onclick = () => { task.text = inp.value.trim() || task.text; editingId = null; save(); render(); };
+        li.appendChild(saveBtn);
+        return li;
+      }
       const span = document.createElement('span');
       if (task.done) {
         span.className = 'done-msg';
@@ -320,7 +430,6 @@
         span.className = 'task-text';
         span.textContent = task.text;
       }
-      li.appendChild(checkbox);
       li.appendChild(span);
       if (task.due && !task.done) {
         const due = document.createElement('span');
@@ -336,30 +445,47 @@
           btn.className = 'icon-btn' + (task.icon === icon ? ' selected' : '');
           btn.textContent = icon;
           btn.onclick = () => {
-            task.icon = (task.icon === icon) ? null : icon;
+            if (task.icon === icon) { task.icon = null; }
+            else { task.icon = icon; showToast(icon + ' ' + ICON_LABEL[icon] + 'に入れました'); }
             save();
             render();
           };
           iconGroup.appendChild(btn);
         });
         li.appendChild(iconGroup);
+        const rowBtns = document.createElement('div');
+        rowBtns.className = 'row-btns';
+        const editBtn = document.createElement('button');
+        editBtn.className = 'mini-btn';
+        editBtn.textContent = '✏️';
+        editBtn.onclick = () => { editingId = task.id; render(); };
+        const delBtn = document.createElement('button');
+        delBtn.className = 'mini-btn';
+        delBtn.textContent = '🗑️';
+        delBtn.onclick = () => {
+          if (confirm('このタスクを削除しますか？')) {
+            tasks = tasks.filter(t => t.id !== task.id);
+            save();
+            render();
+          }
+        };
+        rowBtns.appendChild(editBtn);
+        rowBtns.appendChild(delBtn);
+        li.appendChild(rowBtns);
       }
       if (screenKey === 'check' && !task.done) {
         const dateInput = document.createElement('input');
         dateInput.type = 'date';
         dateInput.className = 'due-input';
         if (task.due) dateInput.value = task.due;
-        dateInput.onchange = () => {
-          task.due = dateInput.value || null;
-          save();
-          render();
-        };
+        dateInput.onchange = () => { task.due = dateInput.value || null; save(); render(); };
         li.appendChild(dateInput);
       }
       return li;
     }
     load();
     render();
+    renderStats();
   </script>
 </body>
 </html>
