@@ -4,86 +4,109 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>やることポケット</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✅</text></svg>">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #1565c0;
+      --blue-dark: #0d47a1;
+      --yellow: #fbc02d;
+      --yellow-soft: #fff9c4;
+      --red: #d32f2f;
+    }
     body {
       font-family: -apple-system, "Hiragino Sans", sans-serif;
-      background: #f0f4f8;
-      color: #333;
+      background: #eef2f7;
+      color: #2c3e50;
       max-width: 500px;
       margin: 0 auto;
       min-height: 100vh;
-      padding: 20px 20px 80px;
+      padding: 24px 18px 88px;
     }
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 16px;
     }
-    h1 { font-size: 22px; color: #1565c0; }
+    h1 {
+      font-size: 24px;
+      color: var(--blue);
+      letter-spacing: 0.5px;
+    }
     .add-btn {
-      background: #1565c0;
+      background: var(--blue);
       color: #fff;
       border: none;
-      width: 44px;
-      height: 44px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      font-size: 26px;
+      font-size: 28px;
       cursor: pointer;
       line-height: 1;
+      box-shadow: 0 3px 8px rgba(21,101,192,0.35);
+      transition: transform 0.12s, box-shadow 0.12s;
     }
+    .add-btn:hover { transform: translateY(-2px); }
+    .add-btn:active { transform: scale(0.94); }
     .hint {
-      background: #fff9c4;
-      padding: 10px 14px;
-      border-radius: 8px;
+      background: var(--yellow-soft);
+      padding: 12px 16px;
+      border-radius: 12px;
       font-size: 14px;
-      margin-bottom: 16px;
-      color: #795548;
+      margin-bottom: 18px;
+      color: #6d4c00;
+      border-left: 4px solid var(--yellow);
     }
     .screen { display: none; }
-    .screen.active { display: block; }
-    .screen-title { font-size: 18px; color: #1565c0; margin-bottom: 12px; }
+    .screen.active { display: block; animation: fadeIn 0.25s; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .screen-title {
+      font-size: 19px;
+      color: var(--blue);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
     .link-btn {
       display: inline-block;
-      background: #fbc02d;
-      color: #333;
+      background: var(--yellow);
+      color: #5d4200;
       text-decoration: none;
-      padding: 10px 16px;
-      border-radius: 8px;
+      padding: 11px 18px;
+      border-radius: 10px;
       font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 16px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 6px rgba(251,192,45,0.4);
+      transition: transform 0.12s;
     }
+    .link-btn:active { transform: scale(0.96); }
     .task-list { list-style: none; }
     .task-item {
       background: #fff;
-      padding: 14px;
-      border-radius: 8px;
-      margin-bottom: 10px;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 11px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      gap: 11px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
       flex-wrap: wrap;
-      transition: opacity 0.5s;
+      transition: opacity 0.5s, transform 0.12s;
     }
-    .task-item.fading { opacity: 0; }
+    .task-item.fading { opacity: 0; transform: translateX(20px); }
     .task-item input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       cursor: pointer;
       flex-shrink: 0;
+      accent-color: var(--blue);
     }
-    .task-text { flex: 1; word-break: break-all; min-width: 120px; }
-    .task-item.done .task-text {
-      text-decoration: line-through;
-      color: #aaa;
-    }
+    .task-text { flex: 1; word-break: break-all; min-width: 120px; font-size: 15px; }
     .done-msg {
       flex: 1;
-      color: #c62828;
-      font-weight: bold;
+      color: var(--red);
+      font-weight: 700;
       min-width: 120px;
     }
     .icon-group {
@@ -92,39 +115,42 @@
       flex-shrink: 0;
     }
     .icon-btn {
-      background: #f0f0f0;
+      background: #f1f4f8;
       border: 2px solid transparent;
-      border-radius: 8px;
-      width: 36px;
-      height: 36px;
+      border-radius: 10px;
+      width: 38px;
+      height: 38px;
       font-size: 18px;
       cursor: pointer;
       line-height: 1;
       transition: all 0.15s;
     }
+    .icon-btn:active { transform: scale(0.9); }
     .icon-btn.selected {
-      background: #1565c0;
-      border-color: #0d47a1;
+      background: var(--blue);
+      border-color: var(--blue-dark);
+      box-shadow: 0 2px 6px rgba(21,101,192,0.4);
     }
     .empty-msg {
-      color: #999;
+      color: #9aa5b1;
       font-size: 14px;
-      padding: 20px 0;
+      padding: 28px 0;
       text-align: center;
     }
     .due-label {
       font-size: 12px;
-      color: #1565c0;
-      background: #e3f2fd;
-      padding: 3px 8px;
-      border-radius: 6px;
+      color: var(--blue);
+      background: #e3f0fd;
+      padding: 4px 9px;
+      border-radius: 8px;
+      font-weight: 600;
     }
     .due-input {
       font-size: 13px;
-      padding: 5px 8px;
-      border: 1px solid #a5d6a7;
-      border-radius: 6px;
-      color: #2e7d32;
+      padding: 6px 9px;
+      border: 1px solid #cfd8e3;
+      border-radius: 8px;
+      color: var(--blue);
     }
     .bottom-nav {
       position: fixed;
@@ -135,24 +161,25 @@
       max-width: 500px;
       background: #fff;
       display: flex;
-      border-top: 1px solid #ddd;
-      box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+      border-top: 1px solid #e3e8ee;
+      box-shadow: 0 -3px 10px rgba(0,0,0,0.06);
     }
     .nav-btn {
       flex: 1;
       border: none;
       background: none;
-      padding: 8px 2px;
+      padding: 9px 2px;
       font-size: 11px;
-      color: #888;
+      color: #9aa5b1;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      gap: 3px;
+      transition: color 0.15s;
     }
-    .nav-btn .nav-icon { font-size: 20px; }
-    .nav-btn.active { color: #1565c0; font-weight: bold; }
+    .nav-btn .nav-icon { font-size: 21px; }
+    .nav-btn.active { color: var(--blue); font-weight: 700; }
   </style>
 </head>
 <body>
