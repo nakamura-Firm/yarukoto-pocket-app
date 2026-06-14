@@ -44,6 +44,17 @@
     .screen { display: none; }
     .screen.active { display: block; }
     .screen-title { font-size: 18px; color: #1565c0; margin-bottom: 12px; }
+    .link-btn {
+      display: inline-block;
+      background: #fbc02d;
+      color: #333;
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
     .task-list { list-style: none; }
     .task-item {
       background: #fff;
@@ -107,6 +118,22 @@
       padding: 20px 0;
       text-align: center;
     }
+    .due-label {
+      font-size: 12px;
+      color: #1565c0;
+      background: #e3f2fd;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .due-btn {
+      background: #e8f5e9;
+      border: 1px solid #a5d6a7;
+      color: #2e7d32;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -147,18 +174,25 @@
   </section>
   <section class="screen" data-screen="pin">
     <h2 class="screen-title">📌 軽めのタスク</h2>
+    <p class="hint">いつもこの中は空にすること</p>
     <ul class="task-list" id="list-pin"></ul>
   </section>
   <section class="screen" data-screen="check">
     <h2 class="screen-title">☑️ 重めのタスク</h2>
+    <p class="hint">小さく分解させる</p>
+    <a class="link-btn" href="https://www.mindmeister.com/login" target="_blank">🧠 マインドマイスターで分解する</a>
     <ul class="task-list" id="list-check"></ul>
   </section>
   <section class="screen" data-screen="cal">
     <h2 class="screen-title">🗓️ スケジュール</h2>
+    <p class="hint">予定はGoogleカレンダーで管理しよう</p>
+    <a class="link-btn" href="https://calendar.google.com" target="_blank">📅 Googleカレンダーを開く</a>
     <ul class="task-list" id="list-cal"></ul>
   </section>
   <section class="screen" data-screen="idea">
     <h2 class="screen-title">💡 アイデア</h2>
+    <p class="hint">アクションプランまで落とし込もう。AIも活用しよう</p>
+    <a class="link-btn" href="https://www.mindmeister.com/login" target="_blank">🧠 マインドマイスターで整理する</a>
     <ul class="task-list" id="list-idea"></ul>
   </section>
   <nav class="bottom-nav">
@@ -176,7 +210,7 @@
     function addTask() {
       const text = prompt('タスクの内容を入力してください');
       if (!text || text.trim() === '') return;
-      tasks.push({ id: nextId++, text: text.trim(), icon: null, done: false });
+      tasks.push({ id: nextId++, text: text.trim(), icon: null, done: false, due: null });
       render();
     }
     function switchScreen(target) {
@@ -187,15 +221,19 @@
         b.classList.toggle('active', b.dataset.target === target);
       });
     }
+    function formatDue(dateStr) {
+      const d = new Date(dateStr);
+      return (d.getMonth() + 1) + '月' + d.getDate() + '日';
+    }
     function render() {
       ['list', 'pin', 'check', 'cal', 'idea'].forEach(key => {
         document.getElementById('list-' + key).innerHTML = '';
       });
       tasks.forEach(task => {
-        document.getElementById('list-list').appendChild(makeTaskEl(task, true));
+        document.getElementById('list-list').appendChild(makeTaskEl(task, 'list'));
         if (task.icon) {
           const screenKey = ICON_TO_SCREEN[task.icon];
-          document.getElementById('list-' + screenKey).appendChild(makeTaskEl(task, false));
+          document.getElementById('list-' + screenKey).appendChild(makeTaskEl(task, screenKey));
         }
       });
       ['pin', 'check', 'cal', 'idea'].forEach(key => {
@@ -208,7 +246,7 @@
         }
       });
     }
-    function makeTaskEl(task, showIcons) {
+    function makeTaskEl(task, screenKey) {
       const li = document.createElement('li');
       li.className = 'task-item' + (task.done ? ' done' : '');
       const checkbox = document.createElement('input');
@@ -228,6 +266,12 @@
       }
       li.appendChild(checkbox);
       li.appendChild(span);
+      if (task.due && !task.done) {
+        const due = document.createElement('span');
+        due.className = 'due-label';
+        due.textContent = '期限：' + formatDue(task.due);
+        li.appendChild(due);
+      }
       if (task.done) {
         const undo = document.createElement('button');
         undo.className = 'undo-btn';
@@ -235,7 +279,7 @@
         undo.onclick = () => { task.done = false; render(); };
         li.appendChild(undo);
       }
-      if (showIcons && !task.done) {
+      if (screenKey === 'list' && !task.done) {
         const iconGroup = document.createElement('div');
         iconGroup.className = 'icon-group';
         ICONS.forEach(icon => {
@@ -249,6 +293,18 @@
           iconGroup.appendChild(btn);
         });
         li.appendChild(iconGroup);
+      }
+      if (screenKey === 'check' && !task.done) {
+        const dueBtn = document.createElement('button');
+        dueBtn.className = 'due-btn';
+        dueBtn.textContent = task.due ? '📅 期限を変更' : '📅 期限を設定';
+        dueBtn.onclick = () => {
+          const input = prompt('期限を入力してください（例：2026-06-20）', task.due || '');
+          if (input === null) return;
+          task.due = input.trim() === '' ? null : input.trim();
+          render();
+        };
+        li.appendChild(dueBtn);
       }
       return li;
     }
