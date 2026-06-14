@@ -10,10 +10,10 @@
       font-family: -apple-system, "Hiragino Sans", sans-serif;
       background: #f0f4f8;
       color: #333;
-      padding: 20px;
       max-width: 500px;
       margin: 0 auto;
       min-height: 100vh;
+      padding: 20px 20px 80px;
     }
     header {
       display: flex;
@@ -41,6 +41,9 @@
       margin-bottom: 16px;
       color: #795548;
     }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .screen-title { font-size: 18px; color: #1565c0; margin-bottom: 12px; }
     .task-list { list-style: none; }
     .task-item {
       background: #fff;
@@ -98,6 +101,39 @@
       background: #1565c0;
       border-color: #0d47a1;
     }
+    .empty-msg {
+      color: #999;
+      font-size: 14px;
+      padding: 20px 0;
+      text-align: center;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 500px;
+      background: #fff;
+      display: flex;
+      border-top: 1px solid #ddd;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+    }
+    .nav-btn {
+      flex: 1;
+      border: none;
+      background: none;
+      padding: 8px 2px;
+      font-size: 11px;
+      color: #888;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .nav-btn .nav-icon { font-size: 20px; }
+    .nav-btn.active { color: #1565c0; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -105,61 +141,116 @@
     <h1>やることポケット</h1>
     <button class="add-btn" onclick="addTask()">＋</button>
   </header>
-  <p class="hint">⚾ ボールが来たらすぐに登録する</p>
-  <ul class="task-list" id="taskList"></ul>
+  <section class="screen active" data-screen="list">
+    <p class="hint">⚾ ボールが来たらすぐに登録する</p>
+    <ul class="task-list" id="list-list"></ul>
+  </section>
+  <section class="screen" data-screen="pin">
+    <h2 class="screen-title">📌 軽めのタスク</h2>
+    <ul class="task-list" id="list-pin"></ul>
+  </section>
+  <section class="screen" data-screen="check">
+    <h2 class="screen-title">☑️ 重めのタスク</h2>
+    <ul class="task-list" id="list-check"></ul>
+  </section>
+  <section class="screen" data-screen="cal">
+    <h2 class="screen-title">🗓️ スケジュール</h2>
+    <ul class="task-list" id="list-cal"></ul>
+  </section>
+  <section class="screen" data-screen="idea">
+    <h2 class="screen-title">💡 アイデア</h2>
+    <ul class="task-list" id="list-idea"></ul>
+  </section>
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-target="list" onclick="switchScreen('list')"><span class="nav-icon">📋</span>リスト</button>
+    <button class="nav-btn" data-target="pin" onclick="switchScreen('pin')"><span class="nav-icon">📌</span>軽め</button>
+    <button class="nav-btn" data-target="check" onclick="switchScreen('check')"><span class="nav-icon">☑️</span>重め</button>
+    <button class="nav-btn" data-target="cal" onclick="switchScreen('cal')"><span class="nav-icon">🗓️</span>予定</button>
+    <button class="nav-btn" data-target="idea" onclick="switchScreen('idea')"><span class="nav-icon">💡</span>アイデア</button>
+  </nav>
   <script>
-    const taskList = document.getElementById('taskList');
+    const ICON_TO_SCREEN = { '📌': 'pin', '☑️': 'check', '🗓️': 'cal', '💡': 'idea' };
     const ICONS = ['📌', '☑️', '🗓️', '💡'];
+    let tasks = [];
+    let nextId = 1;
     function addTask() {
       const text = prompt('タスクの内容を入力してください');
       if (!text || text.trim() === '') return;
-      renderTask(text.trim());
+      tasks.push({ id: nextId++, text: text.trim(), icon: null, done: false });
+      render();
     }
-    function renderTask(text) {
-      const li = document.createElement('li');
-      li.className = 'task-item';
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      const span = document.createElement('span');
-      span.className = 'task-text';
-      span.textContent = text;
-      const iconGroup = document.createElement('div');
-      iconGroup.className = 'icon-group';
-      ICONS.forEach(icon => {
-        const btn = document.createElement('button');
-        btn.className = 'icon-btn';
-        btn.textContent = icon;
-        btn.onclick = () => {
-          const alreadySelected = btn.classList.contains('selected');
-          iconGroup.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('selected'));
-          if (!alreadySelected) {
-            btn.classList.add('selected');
-          }
-        };
-        iconGroup.appendChild(btn);
+    function switchScreen(target) {
+      document.querySelectorAll('.screen').forEach(s => {
+        s.classList.toggle('active', s.dataset.screen === target);
       });
-      checkbox.addEventListener('change', () => {
-        if (checkbox.checked) {
-          li.classList.add('done');
-          span.textContent = 'タスクを完了しました。楽勝🖊️';
-          span.className = 'done-msg';
-          const undo = document.createElement('button');
-          undo.className = 'undo-btn';
-          undo.textContent = '元に戻す';
-          undo.onclick = () => {
-            li.classList.remove('done');
-            span.textContent = text;
-            span.className = 'task-text';
-            checkbox.checked = false;
-            undo.remove();
-          };
-          li.appendChild(undo);
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.target === target);
+      });
+    }
+    function render() {
+      ['list', 'pin', 'check', 'cal', 'idea'].forEach(key => {
+        document.getElementById('list-' + key).innerHTML = '';
+      });
+      tasks.forEach(task => {
+        document.getElementById('list-list').appendChild(makeTaskEl(task, true));
+        if (task.icon) {
+          const screenKey = ICON_TO_SCREEN[task.icon];
+          document.getElementById('list-' + screenKey).appendChild(makeTaskEl(task, false));
         }
       });
+      ['pin', 'check', 'cal', 'idea'].forEach(key => {
+        const ul = document.getElementById('list-' + key);
+        if (ul.children.length === 0) {
+          const p = document.createElement('li');
+          p.className = 'empty-msg';
+          p.textContent = 'まだタスクがありません';
+          ul.appendChild(p);
+        }
+      });
+    }
+    function makeTaskEl(task, showIcons) {
+      const li = document.createElement('li');
+      li.className = 'task-item' + (task.done ? ' done' : '');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = task.done;
+      checkbox.onchange = () => {
+        task.done = checkbox.checked;
+        render();
+      };
+      const span = document.createElement('span');
+      if (task.done) {
+        span.className = 'done-msg';
+        span.textContent = 'タスクを完了しました。楽勝🖊️';
+      } else {
+        span.className = 'task-text';
+        span.textContent = task.text;
+      }
       li.appendChild(checkbox);
       li.appendChild(span);
-      li.appendChild(iconGroup);
-      taskList.appendChild(li);
+      if (task.done) {
+        const undo = document.createElement('button');
+        undo.className = 'undo-btn';
+        undo.textContent = '元に戻す';
+        undo.onclick = () => { task.done = false; render(); };
+        li.appendChild(undo);
+      }
+      if (showIcons && !task.done) {
+        const iconGroup = document.createElement('div');
+        iconGroup.className = 'icon-group';
+        ICONS.forEach(icon => {
+          const btn = document.createElement('button');
+          btn.className = 'icon-btn' + (task.icon === icon ? ' selected' : '');
+          btn.textContent = icon;
+          btn.onclick = () => {
+            task.icon = (task.icon === icon) ? null : icon;
+            render();
+          };
+          iconGroup.appendChild(btn);
+        });
+        li.appendChild(iconGroup);
+      }
+      return li;
     }
   </script>
 </body>
